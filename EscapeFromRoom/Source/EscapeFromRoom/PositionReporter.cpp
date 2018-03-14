@@ -19,7 +19,7 @@ void UPositionReporter::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+		
 		FString OwnerName = GetOwner()->GetName();
 		FString OwnerTransform = GetOwner()->GetTransform().GetLocation().ToString();
 		UE_LOG(LogTemp, Warning, TEXT(" %s is at position %s"), *OwnerName, *OwnerTransform);
@@ -29,11 +29,12 @@ void UPositionReporter::BeginPlay()
 }
 
 
+
 // Called every frame
 void UPositionReporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	
 	// ...
 }
 
