@@ -1,0 +1,15 @@
+#################################
+# Unreal Ungine Generated Files #
+#################################
+*/Binaries/
+*/Build/
+*/DerivedDataCache/
+*/Intermediate/
+*/Saved/
+EscapeFromRoom/Content/StarterContent/
+
+#################################
+# Visual Studio Generated Files #
+#################################
+*.VC.db
+EscapeFromRoom/.vs/EscapeFromRoom/v15/Browse.VC.opendb
