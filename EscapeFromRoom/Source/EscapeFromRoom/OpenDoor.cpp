@@ -21,17 +21,17 @@ void UOpenDoor::BeginPlay()
 	
 	FString OwnerName = GetOwner()->GetName();
 	AActor* Owner = GetOwner();
-//	float OwnerRotPitch = Owner->GetActorRotation().Pitch();
-//	float OwnerRotYaw = Owner->GetActorRotation().Yaw();
-//	float OwnerRotRoll = Owner->GetActorRotation().Roll();
 
-	FRotator NewRotator = FRotator(0.f, - 60.f, 0.f);
+	float Pitch = Owner->GetActorRotation().Pitch;
+	float Yaw = Owner->GetActorRotation().Yaw;
+	float Roll = Owner->GetActorRotation().Roll;
+	auto NewRotator = FRotator(Pitch, Yaw - 60.f, Roll);
 	Owner->SetActorRotation(NewRotator);
 
 
 //	UE_LOG(LogTemp, Warning, TEXT(" %s rotation is %f"), *OwnerName, *NewRotator);
 
-	
+		
 }
 
 

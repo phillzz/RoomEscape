@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "EscapeFromRoom.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "OpenDoor.generated.h"
