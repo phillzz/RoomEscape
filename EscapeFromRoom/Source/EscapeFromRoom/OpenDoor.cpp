@@ -17,22 +17,38 @@ UOpenDoor::UOpenDoor()
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	Owner = GetOwner();
 	ActorThatOpenDoors = GetWorld()->GetFirstPlayerController()->GetPawn();
 }
 
 void UOpenDoor::OpenDoor()
 {
-	FString OwnerName = GetOwner()->GetName();
-	AActor* Owner = GetOwner();
-	/*
-	float Pitch = Owner->GetActorRotation().Pitch;
-	float Yaw = Owner->GetActorRotation().Yaw;
-	float Roll = Owner->GetActorRotation().Roll;
-	*/
+	float ownerPitch = Owner->GetActorRotation().Pitch;
+	float ownerYaw = Owner->GetActorRotation().Yaw;
+	float ownerRoll = Owner->GetActorRotation().Roll;
+	// If door is closed then open it
+	if (!bDoorState)
+	{
+		FRotator NewRotator = FRotator(ownerPitch, ownerYaw - OpenAngle, ownerRoll);
+		Owner->SetActorRotation(NewRotator);
+		bDoorState = true;
+	}
+}
 
-	auto NewRotator = FRotator(0, 60.f, 0);
-	Owner->SetActorRotation(NewRotator);
+void UOpenDoor::CloseDoor()
+{
+	float ownerPitch = Owner->GetActorRotation().Pitch;
+	float ownerYaw = Owner->GetActorRotation().Yaw;
+	float ownerRoll = Owner->GetActorRotation().Roll;
+	// If door is open then close it
+	if (bDoorState)
+	{
+		FRotator NewRotator = FRotator(ownerPitch, ownerYaw + OpenAngle, ownerRoll);
+		Owner->SetActorRotation(NewRotator);
+		bDoorState = false;
+	}
+	
 }
 
 
@@ -44,11 +60,15 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	
 	// if the ActorThatOpensDoor in the volume
 
-	if (presurePlate->IsOverlappingActor(ActorThatOpenDoors))
+	if (presurePlate->IsOverlappingActor(ActorThatOpenDoors))	
 	{
 		OpenDoor();
+		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+		
 	}
-
-	
+	if ( GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
+		{
+			CloseDoor();
+		} 
 }
 

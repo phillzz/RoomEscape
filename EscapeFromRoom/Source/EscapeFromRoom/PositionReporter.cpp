@@ -24,11 +24,7 @@ void UPositionReporter::BeginPlay()
 		FString OwnerName = GetOwner()->GetName();
 		FString OwnerTransform = GetOwner()->GetTransform().GetLocation().ToString();
 		UE_LOG(LogTemp, Warning, TEXT(" %s is at position %s"), *OwnerName, *OwnerTransform);
-		FString ZAxis = GetOwner()->GetTransform().GetRotation().ToString();
 
-		UE_LOG(LogTemp, Warning, TEXT(" %s is at position %s"), *ZAxis, *OwnerTransform);
-	// ...
-	
 }
 
 
