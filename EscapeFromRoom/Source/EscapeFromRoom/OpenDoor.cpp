@@ -13,25 +13,26 @@ UOpenDoor::UOpenDoor()
 	// ...
 }
 
-
 // Called when the game starts
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	ActorThatOpenDoors = GetWorld()->GetFirstPlayerController()->GetPawn();
+}
+
+void UOpenDoor::OpenDoor()
+{
 	FString OwnerName = GetOwner()->GetName();
 	AActor* Owner = GetOwner();
-
+	/*
 	float Pitch = Owner->GetActorRotation().Pitch;
 	float Yaw = Owner->GetActorRotation().Yaw;
 	float Roll = Owner->GetActorRotation().Roll;
-	auto NewRotator = FRotator(Pitch, Yaw - 60.f, Roll);
+	*/
+
+	auto NewRotator = FRotator(0, 60.f, 0);
 	Owner->SetActorRotation(NewRotator);
-
-
-//	UE_LOG(LogTemp, Warning, TEXT(" %s rotation is %f"), *OwnerName, *NewRotator);
-
-		
 }
 
 
@@ -40,6 +41,14 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	
+	// if the ActorThatOpensDoor in the volume
+
+	if (presurePlate->IsOverlappingActor(ActorThatOpenDoors))
+	{
+		OpenDoor();
+	}
+
+	
 }
 
