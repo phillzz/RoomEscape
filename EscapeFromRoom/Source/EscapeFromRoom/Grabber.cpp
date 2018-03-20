@@ -32,16 +32,14 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// Get current pawn view point
-	
+	//TODO: Refactor this piece
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(ViewPointLocation, ViewPointRotation);
+	FVector LineTraceEnd = ViewPointLocation + ViewPointRotation.Vector() * reach;
+	if (PhysicsHandle->GrabbedComponent)
+	{
+		PhysicsHandle->SetTargetLocation(LineTraceEnd);
+	}
 
-	// Trace line forward to detect if the chair close enough to take it
-		// If yes attach chair to Owner
-
-	//or
-	
-	// Add collision box on pawn.
-	// if chair is overlapping owner - attach to owner
 }
 
 // Detect physic actors near enough to pawn 
@@ -68,14 +66,27 @@ const FHitResult UGrabber::GetFirstphysicsBodiInReach()
 		UE_LOG(LogTemp, Warning, TEXT("This is %s"), *(HittedActor->GetName()));
 	}
 	
-		return FHitResult();
+		return Hit;
 }
 
 // Grab Input
 void UGrabber::Grab()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Grab Pressed"))
-	GetFirstphysicsBodiInReach();
+	auto HitResult = GetFirstphysicsBodiInReach();
+	auto ComponentToGrab = HitResult.GetComponent();
+	auto ActorHit = HitResult.GetActor();
+
+	if (ActorHit != nullptr)
+	{
+		PhysicsHandle->GrabComponent(
+		ComponentToGrab,
+		NAME_None,
+		ComponentToGrab->GetOwner()->GetActorLocation(),
+		true // allow rotation
+		);
+	}
+
 }
 
 // Release Input
