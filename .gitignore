@@ -12,6 +12,9 @@ EscapeFromRoom/Content/StarterContent/
 # Visual Studio Generated Files #
 #################################
 *.VC.db
+*.suo
+*.VC.opendb
+*.sln
 EscapeFromRoom/.vs/EscapeFromRoom/v15/Browse.VC.opendb
 EscapeFromRoom/.vs/EscapeFromRoom/v15/ipch/AutoPCH/976579a7dce1ca3/POSITIONREPORTER.ipch
 EscapeFromRoom/.vs/EscapeFromRoom/v15/Solution.VC.db-shm
