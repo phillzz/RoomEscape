@@ -39,7 +39,7 @@ private:
 	float DoorCloseDelay = 1.f;
 
 	AActor* ActorThatOpenDoors;
-	AActor* Owner;
+	AActor* Owner;	
 	float LastDoorOpenTime;
 	bool bDoorState = false;
 };
