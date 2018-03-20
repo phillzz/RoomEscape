@@ -92,6 +92,12 @@ void UGrabber::Grab()
 // Release Input
 void UGrabber::Release()
 {
+
+	if (PhysicsHandle->GrabbedComponent)
+	{
+		PhysicsHandle->ReleaseComponent();
+	}
+		
 	UE_LOG(LogTemp, Warning, TEXT("Grab Released"))
 }
 
