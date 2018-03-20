@@ -17,7 +17,7 @@ public:
 	UGrabber();
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	void TraceDebugLine();
+	
 
 
 protected:
@@ -29,5 +29,11 @@ private:
 	FVector ViewPointLocation;
 	FRotator ViewPointRotation;
 	float reach = 100.f;
-	
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+	UInputComponent* InputComponent = nullptr;
+	void Grab();
+	void Release();
+	void CheckForPhysicsHandle();
+	void SetupInputComponent();
+	const FHitResult GetFirstphysicsBodiInReach();
 };

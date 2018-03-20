@@ -19,8 +19,11 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("Grabber is on-line!"))
-	
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	CheckForPhysicsHandle();
+	SetupInputComponent();
+
 }
 
 
@@ -30,8 +33,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Get current pawn view point
-	TraceDebugLine();
-
 	
 
 	// Trace line forward to detect if the chair close enough to take it
@@ -43,24 +44,15 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	// if chair is overlapping owner - attach to owner
 }
 
-void UGrabber::TraceDebugLine()
+// Detect physic actors near enough to pawn 
+const FHitResult UGrabber::GetFirstphysicsBodiInReach()
 {
-	/// Draw line for visualization
+	// Setup End point for line trace
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(ViewPointLocation, ViewPointRotation);
 	FVector LineTraceEnd = ViewPointLocation + ViewPointRotation.Vector() * reach;
-	DrawDebugLine(
-		GetWorld(),
-		ViewPointLocation,
-		LineTraceEnd,
-		FColor(255,0,0),
-		false,
-		0.f,
-		0.f,
-		2.f
-	);
-	/// Setup query params
+	// Setup query params for trace line
 	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
-	/// Trace line
+	// Trace line
 	FHitResult Hit;
 	GetWorld()->LineTraceSingleByObjectType(
 		OUT Hit,
@@ -69,13 +61,55 @@ void UGrabber::TraceDebugLine()
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
 		TraceParams
 	);
-	
+	// Get name of reached Actor
 	AActor* HittedActor = Hit.GetActor();
 		if (HittedActor)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("This is %s"), *(HittedActor->GetName()));
 	}
 	
-	
+		return FHitResult();
 }
+
+// Grab Input
+void UGrabber::Grab()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grab Pressed"))
+	GetFirstphysicsBodiInReach();
+}
+
+// Release Input
+void UGrabber::Release()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grab Released"))
+}
+
+// Check if pawn have a physics component 
+void UGrabber::CheckForPhysicsHandle()
+{
+
+	if (PhysicsHandle)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s support physics"), *(GetOwner()->GetName()))
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s haven't physics component!"), *(GetOwner()->GetName()))
+	}
+};
+
+// Bind key press to Grab and release events
+void UGrabber::SetupInputComponent()
+{
+	if (InputComponent)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Input Component online!"))
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No Input Component!"))
+	}
+};
 
